@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>林玉婷 Lin Yu-Ting | 數位多媒體・跨文化創作者</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Plus Jakarta Sans, Inter & Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        canvas: '#FAFAFA',
+                        surface: '#FFFFFF',
+                        accent: {
+                            indigo: '#4F46E5',      // 專業沉穩靛藍
+                            terracotta: '#D97757',  // 溫暖陶土橘
+                            sage: '#52796F',        // 自然鼠尾草綠
+                        }
+                    },
+                    animation: {
+                        'float-slow': 'float 7s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAFAFA;
+            color: #1E293B;
+        }
+        .glass-header {
+            background: rgba(250, 250, 250, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+        .soft-card {
+            background: #FFFFFF;
+            border: 1px solid rgba(226, 232, 240, 0.85);
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.03);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+        }
+        .soft-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.06);
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+    <!-- Toast Notification -->
+    <div id="toast" role="status" aria-live="polite" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 ease-out bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3">
+        <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+        <span id="toast-msg" class="text-sm font-medium tracking-wide">已複製到剪貼簿</span>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 inset-x-0 z-40 glass-header border-b border-slate-200/70">
+        <div class="max-w-6xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
+            <!-- Brand -->
+            <a href="#top" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-base tracking-wider group-hover:bg-accent-indigo transition-colors">
+                    YT
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-base font-bold text-slate-900 tracking-tight">林玉婷</span>
+                    <span class="text-[11px] font-medium text-slate-500 tracking-wider uppercase">Lin Yu-Ting</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                <a href="#education" class="hover:text-accent-indigo transition-colors">教育與語言</a>
+                <a href="#experience" class="hover:text-accent-indigo transition-colors">工作經歷</a>
+                <a href="#skills-interests" class="hover:text-accent-indigo transition-colors">技能與興趣</a>
+                <a href="#contact" class="hover:text-accent-indigo transition-colors">聯絡方式</a>
+            </nav>
+
+            <!-- Desktop CTA -->
+            <div class="hidden md:flex items-center">
+                <a href="#contact" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-accent-indigo text-white text-sm font-medium px-5 py-2.5 rounded-full transition-colors shadow-xs">
+                    <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                    <span>與我聯繫</span>
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" aria-label="開啟導覽選單" class="md:hidden p-2.5 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-6 py-4 space-y-2 shadow-lg">
+            <a href="#education" class="mobile-nav-link block py-2.5 px-3 rounded-xl text-slate-700 font-medium hover:bg-slate-50">教育與語言</a>
+            <a href="#experience" class="mobile-nav-link block py-2.5 px-3 rounded-xl text-slate-700 font-medium hover:bg-slate-50">工作經歷</a>
+            <a href="#skills-interests" class="mobile-nav-link block py-2.5 px-3 rounded-xl text-slate-700 font-medium hover:bg-slate-50">技能與興趣</a>
+            <a href="#contact" class="mobile-nav-link block py-2.5 px-3 rounded-xl text-accent-indigo font-semibold bg-indigo-50/60">聯絡方式</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="top" class="pt-20">
+
+        <!-- 1. Hero Section -->
+        <section class="relative overflow-hidden py-16 sm:py-24 lg:py-28 px-5 sm:px-8">
+            <!-- Subtle Ambient Background Blobs -->
+            <div class="absolute top-12 left-1/4 w-80 h-80 bg-indigo-100/50 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+            <div class="absolute bottom-10 right-1/4 w-96 h-96 bg-orange-100/40 rounded-full blur-3xl -z-10 pointer-events-none animate-float-slow"></div>
+
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
+                
+                <!-- Left Column: Introduction -->
+                <div class="lg:col-span-7 space-y-7 text-center lg:text-left">
+                    <!-- Department Badge -->
+                    <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white border border-slate-200/90 shadow-xs text-xs sm:text-sm font-medium text-slate-700">
+                        <span class="w-2 h-2 rounded-full bg-accent-indigo"></span>
+                        <span>黎明技術學院 數位多媒體系</span>
+                    </div>
+
+                    <!-- Name & English Subtitle -->
+                    <div class="space-y-2">
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight leading-tight">
+                            林玉婷 <span class="block sm:inline text-2xl sm:text-3xl font-normal text-slate-400 sm:ml-2">Lin Yu-Ting</span>
+                        </h1>
+                    </div>
+
+                    <!-- Personal Motto Box -->
+                    <div class="bg-white/90 border border-slate-200/80 rounded-2xl p-6 sm:p-7 shadow-xs relative">
+                        <div class="flex items-start gap-3.5 text-left">
+                            <div class="w-9 h-9 rounded-xl bg-amber-50 text-accent-terracotta flex items-center justify-center shrink-0 mt-0.5">
+                                <i data-lucide="sparkles" class="w-5 h-5"></i>
+                            </div>
+                            <p class="text-slate-700 text-base sm:text-lg font-medium leading-relaxed">
+                                「喜歡簡單生活，挑戰自己探索不一樣的世界，也喜歡認真對待每一件事。」
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Brief Cross-cultural Highlight Tags -->
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 text-xs font-medium text-slate-600">
+                        <span class="px-3.5 py-1.5 rounded-full bg-indigo-50/80 text-indigo-700 border border-indigo-100">數位多媒體創作</span>
+                        <span class="px-3.5 py-1.5 rounded-full bg-emerald-50/80 text-accent-sage border border-emerald-100">三語跨文化背景</span>
+                        <span class="px-3.5 py-1.5 rounded-full bg-orange-50/80 text-accent-terracotta border border-orange-100">音樂與影像敘事</span>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#experience" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-accent-indigo text-white font-medium px-7 py-3.5 rounded-2xl transition-all shadow-sm hover:shadow-md">
+                            <span>了解我的經歷</span>
+                            <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#contact" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 font-medium px-7 py-3.5 rounded-2xl border border-slate-200 transition-all">
+                            <i data-lucide="mail" class="w-4 h-4 text-accent-indigo"></i>
+                            <span>聯絡我</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Column: Personal Photo Frame -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative group w-full max-w-[340px] sm:max-w-[380px]">
+                        <!-- Subtle Gradient Glow -->
+                        <div class="absolute -inset-2 bg-gradient-to-tr from-indigo-200/70 via-orange-100/70 to-emerald-200/70 rounded-[2rem] blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <!-- Card Container -->
+                        <div class="relative bg-white p-3.5 rounded-[1.75rem] border border-slate-200/80 shadow-lg">
+                            <!-- 
+                                =====================================================================
+                                【個人照片替換說明】
+                                請將下方 <img> 標籤的 src 屬性替換為您的個人照片網址或相對路徑。
+                                範例 1 (網路圖片): src="https://example.com/your-photo.jpg"
+                                範例 2 (同資料夾本機圖片): src="./lin-yuting.jpg"
+                                =====================================================================
+                            -->
+                            <div class="aspect-[4/5] w-full rounded-2xl overflow-hidden bg-slate-100 relative">
+                                <img 
+                                    src="https://placehold.co/640x800/F1F5F9/475569?text=%E6%9E%97%E7%8E%89%E5%A9%B7%0ALin+Yu-Ting" 
+                                    alt="林玉婷 個人照片" 
+                                    class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                                    onerror="this.src='https://placehold.co/640x800/F8FAFC/64748B?text=Photo+Placeholder'"
+                                >
+                                <!-- Minimal Floating Caption -->
+                                <div class="absolute bottom-3.5 inset-x-3.5 bg-white/90 backdrop-blur-md px-4 py-3 rounded-xl border border-white/80 shadow-sm flex items-center justify-between">
+                                    <div>
+                                        <p class="text-xs font-bold text-slate-900">Explore & Create</p>
+                                        <p class="text-[11px] text-slate-500">簡單生活・認真對待每一件事</p>
+                                    </div>
+                                    <div class="w-8 h-8 rounded-lg bg-indigo-50 text-accent-indigo flex items-center justify-center">
+                                        <i data-lucide="camera" class="w-4 h-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 2. Education & Languages Section (教育背景與語言能力) -->
+        <section id="education" class="py-20 px-5 sm:px-8 border-t border-slate-200/60 bg-white/60">
+            <div class="max-w-6xl mx-auto reveal">
+                <!-- Section Header -->
+                <div class="max-w-2xl mb-14">
+                    <span class="text-xs font-bold tracking-widest uppercase text-accent-indigo">Education & Languages</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2">教育背景與語言能力</h2>
+                    <p class="text-slate-500 text-sm sm:text-base mt-3 leading-relaxed">
+                        融合台灣數位多媒體實作與柬埔寨經濟學學術訓練，培養跨領域思維與流利的多語溝通橋樑。
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <!-- Academic Background (Left 6 Cols) -->
+                    <div class="lg:col-span-6 space-y-5">
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2 mb-4">
+                            <i data-lucide="graduation-cap" class="w-4 h-4 text-accent-indigo"></i>
+                            <span>學歷與專業進修</span>
+                        </h3>
+
+                        <!-- Degree 1 -->
+                        <div class="soft-card p-6 sm:p-7 rounded-2xl relative overflow-hidden">
+                            <div class="flex items-center justify-between gap-4">
+                                <div class="space-y-1.5">
+                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-accent-indigo">
+                                        目前主修
+                                    </span>
+                                    <h4 class="text-xl font-bold text-slate-900">黎明技術學院</h4>
+                                    <p class="text-base font-medium text-slate-700">大一 · 數位多媒體系</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-accent-indigo flex items-center justify-center shrink-0">
+                                    <i data-lucide="clapperboard" class="w-6 h-6"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Degree 2 -->
+                        <div class="soft-card p-6 sm:p-7 rounded-2xl relative overflow-hidden">
+                            <div class="flex items-start justify-between gap-4">
+                                <div class="space-y-2">
+                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-accent-sage">
+                                        跨文化學術背景
+                                    </span>
+                                    <h4 class="text-xl font-bold text-slate-900">柬文教育體系</h4>
+                                    <p class="text-base font-medium text-slate-700">經濟學系（大二程度）</p>
+                                    <p class="text-sm text-slate-500 leading-relaxed pt-1">
+                                        具備經濟學邏輯分析與商業基礎知識，能以母語級柬文進行專業領域學習與深度跨文化溝通。
+                                    </p>
+                                </div>
+                                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-accent-sage flex items-center justify-center shrink-0">
+                                    <i data-lucide="globe-2" class="w-6 h-6"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Language Proficiency (Right 6 Cols) -->
+                    <div class="lg:col-span-6">
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2 mb-4">
+                            <i data-lucide="languages" class="w-4 h-4 text-accent-terracotta"></i>
+                            <span>多語言能力指標</span>
+                        </h3>
+
+                        <div class="soft-card p-6 sm:p-8 rounded-2xl space-y-7 h-[calc(100%-2.25rem)] flex flex-col justify-center">
+                            
+                            <!-- Khmer (Native) -->
+                            <div class="space-y-2.5">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="font-bold text-slate-900 text-base">柬文 (Khmer)</span>
+                                        <span class="text-xs text-slate-400">母語・高等教育背景</span>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-accent-sage border border-emerald-100">
+                                        母語 Native
+                                    </span>
+                                </div>
+                                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-accent-sage rounded-full w-full"></div>
+                                </div>
+                                <p class="text-xs text-slate-500">母語程度，具備完整聽說讀寫與柬文經濟學大二學術背景，能進行深度專業與文化溝通。</p>
+                            </div>
+
+                            <!-- Chinese -->
+                            <div class="space-y-2.5">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="font-bold text-slate-900 text-base">中文 (Chinese)</span>
+                                        <span class="text-xs text-slate-400">聽說讀寫・教學級</span>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-accent-indigo border border-indigo-100">
+                                        C1 精通程度
+                                    </span>
+                                </div>
+                                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-accent-indigo rounded-full w-[90%]"></div>
+                                </div>
+                                <p class="text-xs text-slate-500">具備高階流利表達與文字撰寫能力，並擁有實際中文教學經驗。</p>
+                            </div>
+
+                            <!-- English -->
+                            <div class="space-y-2.5">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="font-bold text-slate-900 text-base">英文 (English)</span>
+                                        <span class="text-xs text-slate-400">日常與輔導應用</span>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-orange-50 text-accent-terracotta border border-orange-100">
+                                        Intermediate 中級
+                                    </span>
+                                </div>
+                                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-accent-terracotta rounded-full w-[68%]"></div>
+                                </div>
+                                <p class="text-xs text-slate-500">具備穩定閱讀與口語溝通能力，曾擔任英語輔導老師協助學生建立語言自信。</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Work Experience Section (工作經歷) -->
+        <section id="experience" class="py-20 px-5 sm:px-8 border-t border-slate-200/60">
+            <div class="max-w-6xl mx-auto reveal">
+                <div class="max-w-2xl mb-14">
+                    <span class="text-xs font-bold tracking-widest uppercase text-accent-terracotta">Work Experience</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2">工作經歷</h2>
+                    <p class="text-slate-500 text-sm sm:text-base mt-3 leading-relaxed">
+                        從語言教學到行政支援，在每一次服務與協作中累積耐心、溝通技巧與高度責任感。
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+                    
+                    <!-- Role 1: General Management Dept. Operations Support -->
+                    <article class="soft-card p-7 rounded-2xl flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-accent-sage flex items-center justify-center group-hover:scale-105 transition-transform">
+                                    <i data-lucide="layers" class="w-6 h-6"></i>
+                                </div>
+                                <span class="text-xs font-semibold text-slate-400">01 / Operations</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">互聯網公司｜綜合管理部 營運支援</h3>
+                            <p class="text-xs font-medium text-accent-sage mb-4">General Management Dept. - Operations Support</p>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                任職於互聯網公司綜合管理部，負責跨部門資訊統整、內部資源協調與日常營運支援，適應快節奏團隊並具備高效執行力。
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-6 border-t border-slate-100 flex flex-wrap gap-2">
+                            <span class="text-[11px] font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-600">跨部門協調</span>
+                            <span class="text-[11px] font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-600">營運支援</span>
+                        </div>
+                    </article>
+
+                    <!-- Role 2: Chinese Language Teacher -->
+                    <article class="soft-card p-7 rounded-2xl flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-accent-indigo flex items-center justify-center group-hover:scale-105 transition-transform">
+                                    <i data-lucide="book-open-check" class="w-6 h-6"></i>
+                                </div>
+                                <span class="text-xs font-semibold text-slate-400">02 / Teaching</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">中文老師</h3>
+                            <p class="text-xs font-medium text-accent-indigo mb-4">Chinese Language Teacher</p>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                針對不同程度學習者設計系統化中文課程，結合多媒體視覺與互動練習提升語言表達能力。
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-6 border-t border-slate-100 flex flex-wrap gap-2">
+                            <span class="text-[11px] font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-600">跨文化溝通</span>
+                            <span class="text-[11px] font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-600">華語教學</span>
+                        </div>
+                    </article>
+
+                    <!-- Role 3: English Tutor -->
+                    <article class="soft-card p-7 rounded-2xl flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-12 h-12 rounded-2xl bg-orange-50 text-accent-terracotta flex items-center justify-center group-hover:scale-105 transition-transform">
+                                    <i data-lucide="users" class="w-6 h-6"></i>
+                                </div>
+                                <span class="text-xs font-semibold text-slate-400">03 / Tutoring</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">英語輔導老師</h3>
+                            <p class="text-xs font-medium text-accent-terracotta mb-4">English Tutor</p>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                一對一及小組課業輔導，協助學生建立文法架構、口說自信與日常實用英語溝通技巧。
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-6 border-t border-slate-100 flex flex-wrap gap-2">
+                            <span class="text-[11px] font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-600">一對一指導</span>
+                            <span class="text-[11px] font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-600">會話強化</span>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Skills & Interests Section (專業技能與生活興趣) -->
+        <section id="skills-interests" class="py-20 px-5 sm:px-8 border-t border-slate-200/60 bg-white/60">
+            <div class="max-w-6xl mx-auto reveal space-y-20">
+                
+                <!-- Part A: Skills -->
+                <div>
+                    <div class="max-w-2xl mb-12">
+                        <span class="text-xs font-bold tracking-widest uppercase text-accent-indigo">Creative Skills</span>
+                        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2">專業技能</h2>
+                        <p class="text-slate-500 text-sm sm:text-base mt-3">
+                            將音樂的律動感與多媒體剪輯技術結合，創造富有節奏與情感張力的作品。
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Skill 1: Video Editing -->
+                        <div class="soft-card p-7 rounded-2xl border-l-4 border-l-accent-indigo">
+                            <div class="w-11 h-11 rounded-xl bg-indigo-50 text-accent-indigo flex items-center justify-center mb-5">
+                                <i data-lucide="scissors" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">剪輯視頻</h3>
+                            <p class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-3">Video Editing</p>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                熟悉畫面敘事結構、音樂節奏卡點、基礎調色與字幕音效編排，能獨立完成生活 Vlog 與多媒體專題後製。
+                            </p>
+                        </div>
+
+                        <!-- Skill 2: Piano -->
+                        <div class="soft-card p-7 rounded-2xl border-l-4 border-l-accent-terracotta">
+                            <div class="w-11 h-11 rounded-xl bg-orange-50 text-accent-terracotta flex items-center justify-center mb-5">
+                                <i data-lucide="music" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">彈鋼琴</h3>
+                            <p class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-3">Piano Performance</p>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                培養細膩的聽覺敏銳度與旋律感知能力，不僅是日常抒發情感的方式，也為影片配樂與剪輯節奏帶來靈感。
+                            </p>
+                        </div>
+
+                        <!-- Skill 3: Guitar -->
+                        <div class="soft-card p-7 rounded-2xl border-l-4 border-l-accent-sage">
+                            <div class="w-11 h-11 rounded-xl bg-emerald-50 text-accent-sage flex items-center justify-center mb-5">
+                                <i data-lucide="guitar" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">彈吉他</h3>
+                            <p class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-3">Acoustic Guitar</p>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                享受木吉他溫暖純粹的音色與節奏伴奏，在簡單的生活日常中用琴弦記錄心情與創作小品。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Part B: Interests -->
+                <div>
+                    <div class="max-w-2xl mb-10">
+                        <span class="text-xs font-bold tracking-widest uppercase text-accent-sage">Lifestyle & Interests</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-2">生活興趣</h2>
+                        <p class="text-slate-500 text-sm sm:text-base mt-2">
+                            在閱讀中沉澱、在旅行中探索、在鏡頭下留住每一個真實瞬間。
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <!-- Interest 1: Reading -->
+                        <div class="bg-slate-50/90 hover:bg-white border border-slate-200/80 p-6 rounded-2xl transition-all flex items-start gap-4">
+                            <div class="w-11 h-11 rounded-xl bg-white border border-slate-200/80 text-slate-700 flex items-center justify-center shrink-0 shadow-2xs">
+                                <i data-lucide="book-open" class="w-5 h-5 text-accent-indigo"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900">看書</h3>
+                                <p class="text-xs text-slate-400 mb-1.5">Reading</p>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    透過閱讀拓展思考維度，在安靜的文字世界裡保持持續學習與內在平靜。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Interest 2: Traveling -->
+                        <div class="bg-slate-50/90 hover:bg-white border border-slate-200/80 p-6 rounded-2xl transition-all flex items-start gap-4">
+                            <div class="w-11 h-11 rounded-xl bg-white border border-slate-200/80 text-slate-700 flex items-center justify-center shrink-0 shadow-2xs">
+                                <i data-lucide="compass" class="w-5 h-5 text-accent-terracotta"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900">旅遊</h3>
+                                <p class="text-xs text-slate-400 mb-1.5">Traveling</p>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    勇敢走出舒適圈，體驗不同城市的風土人情，用腳步探索不一樣的世界。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Interest 3: Filming / Vlogging -->
+                        <div class="bg-slate-50/90 hover:bg-white border border-slate-200/80 p-6 rounded-2xl transition-all flex items-start gap-4">
+                            <div class="w-11 h-11 rounded-xl bg-white border border-slate-200/80 text-slate-700 flex items-center justify-center shrink-0 shadow-2xs">
+                                <i data-lucide="video" class="w-5 h-5 text-accent-sage"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900">拍視頻</h3>
+                                <p class="text-xs text-slate-400 mb-1.5">Filming & Vlogging</p>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    隨手用鏡頭捕捉生活光影與旅行故事，將平凡日常轉化為值得回味的影像日記。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 5. Contact Section (聯絡方式) -->
+        <section id="contact" class="py-20 sm:py-24 px-5 sm:px-8 border-t border-slate-200/60">
+            <div class="max-w-4xl mx-auto reveal">
+                <div class="text-center max-w-xl mx-auto mb-14">
+                    <span class="text-xs font-bold tracking-widest uppercase text-accent-indigo">Get In Touch</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2">聯絡方式</h2>
+                    <p class="text-slate-500 text-sm sm:text-base mt-3">
+                        無論是影音剪輯合作、多語交流或工作機會，都非常歡迎透過以下方式與我聯繫！
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Email Card -->
+                    <div class="soft-card p-6 rounded-2xl flex flex-col justify-between text-center">
+                        <div class="space-y-3">
+                            <div class="w-12 h-12 mx-auto rounded-2xl bg-indigo-50 text-accent-indigo flex items-center justify-center">
+                                <i data-lucide="mail" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900">Email</h3>
+                            <a href="mailto:bd1151032@venus.lit.edu.tw" class="block text-xs font-mono text-slate-600 hover:text-accent-indigo break-all bg-slate-50 py-2 px-3 rounded-xl border border-slate-100 transition-colors">
+                                bd1151032@venus.lit.edu.tw
+                            </a>
+                        </div>
+                        <div class="mt-5 flex gap-2">
+                            <a href="mailto:bd1151032@venus.lit.edu.tw" class="flex-1 py-2.5 px-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors inline-flex items-center justify-center gap-1.5">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                <span>寄信</span>
+                            </a>
+                            <button type="button" onclick="copyText('bd1151032@venus.lit.edu.tw', 'Email')" class="flex-1 py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-accent-indigo text-white text-xs font-semibold transition-colors inline-flex items-center justify-center gap-1.5">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                <span>複製</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Line ID Card -->
+                    <div class="soft-card p-6 rounded-2xl flex flex-col justify-between text-center">
+                        <div class="space-y-3">
+                            <div class="w-12 h-12 mx-auto rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                <i data-lucide="message-circle" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900">Line ID</h3>
+                            <p class="text-xs font-mono text-slate-600 bg-slate-50 py-2 px-3 rounded-xl border border-slate-100">
+                                blahblah
+                            </p>
+                        </div>
+                        <div class="mt-5">
+                            <button type="button" onclick="copyText('blahblah', 'Line ID')" class="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white text-xs font-semibold transition-colors inline-flex items-center justify-center gap-1.5">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                <span>複製 Line ID</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Instagram Card -->
+                    <div class="soft-card p-6 rounded-2xl flex flex-col justify-between text-center">
+                        <div class="space-y-3">
+                            <div class="w-12 h-12 mx-auto rounded-2xl bg-orange-50 text-accent-terracotta flex items-center justify-center">
+                                <i data-lucide="instagram" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900">Instagram</h3>
+                            <p class="text-xs font-mono text-slate-600 bg-slate-50 py-2 px-3 rounded-xl border border-slate-100">
+                                @blahblajh
+                            </p>
+                        </div>
+                        <div class="mt-5">
+                            <button type="button" onclick="copyText('blahblajh', 'Instagram 帳號')" class="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-accent-terracotta text-white text-xs font-semibold transition-colors inline-flex items-center justify-center gap-1.5">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                <span>複製 Instagram</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200/80 bg-white py-10 px-5 sm:px-8">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-center sm:text-left">
+                <p class="text-sm font-bold text-slate-900">林玉婷 Lin Yu-Ting</p>
+                <p class="text-xs text-slate-500 mt-0.5">© <span id="current-year"></span> 林玉婷. 黎明技術學院 數位多媒體系</p>
+            </div>
+            
+            <a href="#top" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-accent-indigo bg-slate-100 hover:bg-indigo-50 px-4 py-2.5 rounded-full transition-colors">
+                <span>回到頂部</span>
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
+            </a>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Mobile navigation toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Toast Notification Helper
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            
+            toastMsg.textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2800);
+        }
+
+        // Copy to Clipboard (using document.execCommand for reliable iframe compatibility)
+        function copyText(value, label) {
+            const textarea = document.createElement('textarea');
+            textarea.value = value;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast(`已成功複製 ${label}：${value}`);
+                } else {
+                    showToast(`請手動複製 ${label}：${value}`);
+                }
+            } catch (err) {
+                showToast(`請手動複製 ${label}：${value}`);
+            }
+
+            document.body.removeChild(textarea);
+        }
+
+        // Subtle Scroll Reveal Animation
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, {
+            threshold: 0.12
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+    </script>
+</body>
+</html>
